@@ -1,0 +1,30 @@
+/* LandingPage.css */
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto", sans-serif;
+}
+
+.MuiContainer-root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.MuiPaper-root {
+  padding: 2rem;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 15px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.MuiButton-root {
+  margin-left: 10px;
+}
+
+.MuiTypography-root {
+  margin-bottom: 1rem;
+}
