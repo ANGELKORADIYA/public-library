@@ -17,6 +17,7 @@ import Footer from "./gencomp/Footer";
 import HomePage from "./gencomp/HomePage";
 import BookDetailsForm from "./book/BookDetailsForm";
 import UpdateBook from "./book/UpdateBook"
+import Checkout from "./book/Checkout";
 const App = () => {
   const [cookie, setCookie] = useState(document.cookie);
   const [isAuthenticated, setIsAuthenticated] = useState(!!cookie);
@@ -111,12 +112,21 @@ const App = () => {
             )
           }
         />
+        <Route path="/checkout" element={
+          isAuthenticated? (
+            <>
+            {role === "member" ? <Checkout /> : ""}
+            </>
+          ) : (
+            <Navigate to="/login" />
+          )
+        }/>
         <Route
           path="/addbook"
           element={
             isAuthenticated ? (
               <>
-              <BookDetailsForm /> 
+              {role === "librarian" ? <BookDetailsForm /> : ""}
               </>
             ) : (
               <Navigate to="/login" />
@@ -128,7 +138,7 @@ const App = () => {
           element={
             isAuthenticated ? (
               <>
-              <UpdateBook />
+              {role === "librarian" ? <UpdateBook /> : ""}
               </>
             ) : (
               <Navigate to="/login" />

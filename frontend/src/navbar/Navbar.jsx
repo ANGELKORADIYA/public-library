@@ -113,8 +113,8 @@ const App = ({ isAuthenticated, role }) => {
               <StyledLink to="/dashboard">
                 <StyledButton>Home</StyledButton>
               </StyledLink>
-              <StyledLink to="/policecrimereports">
-                <StyledButton>Police Crime Reports</StyledButton>
+              <StyledLink to="/checkout">
+                <StyledButton>Checkout Form</StyledButton>
               </StyledLink>
               <StyledLink to="/map">
                 <StyledButton>Crime Map</StyledButton>

@@ -48,7 +48,7 @@ const BooksList = () => {
 
   const fetchBooks = async () => {
     try {
-      const response = await post("book/getallbooks"); // Replace with your actual API endpoint for fetching all books
+      const response = await post("book/getbooks"); // Replace with your actual API endpoint for fetching all books
       if (response.okk) {
         setBooks(response.data);
         console.log(books)
