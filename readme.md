@@ -2,12 +2,12 @@
 
 ## frontend intallation & run
 
-cd odoo-project
-npm install @mui/material 
+cd frontend
+npm install
 npm run dev
 
 ## backend intallation & run
 
-cd odoo-project
+cd backend
 npm install
 npm run dev
