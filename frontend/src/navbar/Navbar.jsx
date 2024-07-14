@@ -93,12 +93,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const App = ({ setIsSidebarActive, isSidebarActive, isAuthenticated, role }) => {
-
-  const toggleSidebar = () => {
-    setIsSidebarActive(!isSidebarActive);
-  };
-
+const App = ({ isAuthenticated, role }) => {
   const handleLogout = () => {
     document.cookie = "token=;expires=" + new Date().toUTCString();
     window.location = window.location.href;
@@ -108,41 +103,12 @@ const App = ({ setIsSidebarActive, isSidebarActive, isAuthenticated, role }) => 
     <StyledAppBar position="static">
       <StyledToolbar>
         <Box display="flex" alignItems="center">
-          <StyledMenuButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={toggleSidebar}
-          >
-            <MenuIcon />
-          </StyledMenuButton>
           <StyledLogo src={logo} alt="Wanderlogue Logo" />
-          <StyledTitle variant="h6">CyberEye</StyledTitle>
+          <StyledTitle variant="h6">Public Library</StyledTitle>
         </Box>
-        <StyledSearch>
-          <StyledSearchIcon>
-            <SearchIcon />
-          </StyledSearchIcon>
-          <StyledInputBase
-            placeholder="Search..."
-            inputProps={{ "aria-label": "search" }}
-          />
-        </StyledSearch>
+       
         <Box display="flex" alignItems="center">
-          {role === "citizen" && (
-            <>
-              <StyledLink to="/dashboard">
-                <StyledButton>Home</StyledButton>
-              </StyledLink>
-              <StyledLink to="/createreport">
-                <StyledButton>Create Crime Report</StyledButton>
-              </StyledLink>
-              <StyledLink to="/yourreports">
-                <StyledButton>Your Crime Reports</StyledButton>
-              </StyledLink>
-            </>
-          )}
-          {role === "police" && (
+          {isAuthenticated ? (
             <>
               <StyledLink to="/dashboard">
                 <StyledButton>Home</StyledButton>
@@ -154,6 +120,8 @@ const App = ({ setIsSidebarActive, isSidebarActive, isAuthenticated, role }) => 
                 <StyledButton>Crime Map</StyledButton>
               </StyledLink>
             </>
+          ) : (
+            ""
           )}
         </Box>
         <Box display="flex" alignItems="center">

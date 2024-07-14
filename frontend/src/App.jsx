@@ -1,4 +1,5 @@
 // src/App.jsx
+import React, { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -12,13 +13,9 @@ import "./app.css";
 import { post } from "./Rest";
 import Navbar from "./navbar/Navbar";
 import Lander from "./login/Lander";
-import Sidebar from "./gencomp/Sidebar";
-import AboutUs from "./gencomp/AboutUs";
-import ContantUs from "./gencomp/ContactUs";
 import Footer from "./gencomp/Footer";
 import HomePage from "./gencomp/HomePage";
 const App = () => {
-  const [isSidebarActive, setIsSidebarActive] = useState(false); // Sidebar
   const [cookie, setCookie] = useState(document.cookie);
   const [isAuthenticated, setIsAuthenticated] = useState(!!cookie);
   const [role, setRole] = useState(null);
@@ -38,14 +35,8 @@ const App = () => {
       <ToastContainer />
 
       <Navbar
-        setIsSidebarActive={setIsSidebarActive}
-        isSidebarActive={isSidebarActive}
         isAuthenticated={isAuthenticated}
         role={role}
-      />
-      <Sidebar
-        setIsSidebarActive={setIsSidebarActive}
-        isSidebarActive={isSidebarActive}
       />
       <Routes>
         <Route
@@ -92,7 +83,6 @@ const App = () => {
           path="/contactus"
           element={
             <>
-              <ContantUs />
 
               <Footer />
             </>
@@ -102,7 +92,6 @@ const App = () => {
           path="/aboutus"
           element={
             <>
-              <AboutUs />
 
               <Footer />
             </>
@@ -114,7 +103,7 @@ const App = () => {
             isAuthenticated ? (
               <>
               <HomePage  role={role}/>
-              {/* <RandomPosts isSidebarActive={isSidebarActive} /> */}</>
+              </>
             ) : (
               <Navigate to="/login" />
             )
