@@ -113,7 +113,7 @@ const LandingPage = (props) => {
         <SignInPopup open={true} setinorout={setinorout} changecookie={props.changecookie} />
       )}
       {inorout == "signUp" && (
-        <SignUpPopup open={true} setinorout={setinorout} />
+        <SignUpPopup open={true} setinorout={setinorout} changecookie={props.changecookie} />
       )}
     </>
   );

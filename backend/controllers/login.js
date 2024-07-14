@@ -13,10 +13,11 @@ signup takes :-
   companyname
 */
 module.exports.signup = async function (req, res) {
+  console.log(req.body)
   try {
     if (
       (req.body.password,
-      req.body.confirmpassword && req.body.username && req.body.email)
+      req.body.confirmpassword && req.body.username && req.body.email && req.body.address && req.body.pincode && req.body.phone)
     ) {
       if (req.body.password == req.body.confirmpassword) {
         let check = await loginModel.findOne({
@@ -35,6 +36,9 @@ module.exports.signup = async function (req, res) {
             ),
             username: req.body.username,
             role: req.body.role,
+            address: req.body.address,
+            pincode: req.body.pincode,
+            phone: req.body.phone,
           });
           await created.save();
           res.status(200).json({ message: "Signed up Succesfully", okk: true });
@@ -55,12 +59,10 @@ module.exports.signup = async function (req, res) {
 
 module.exports.login = async (req, res) => {
   try {
-    await mongoose.connect(process.env.DB_URL, {
-      dbName: process.env.DB_NAME,
-    });
     let check = await loginModel.findOne({
       email: req.body.email.toLowerCase(),
     });
+    console.log(check)
     if (check && req.body.password != "" && req.body.email != "") {
       if (await bcrypt.compare(req.body.password, check.password)) {
         // if (req.body.page == check.page) {
@@ -96,6 +98,7 @@ module.exports.email = async (req, res) => {
         { _id: valid.email },
         { projection }
       );
+      console.log(valid,req.token)
       if (result) {
         res
           .status(200)

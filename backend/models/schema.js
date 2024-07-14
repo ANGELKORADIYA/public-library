@@ -6,9 +6,13 @@ const loginSchema = new mongoose.Schema({
   password: { type: String, required: true },
   role: {
     type: String,
-    enum: ["citizen", "police", "admin"],
-    default: "citizen",
+    enum: ["member", "librarian", "admin"],
+    default: "member",
   },
+  address: { type: String, required: true },
+  pincode: { type: Number, required: true },
+  phone: { type: Number, required: true },
+  email: { type: String, required: true, unique: true },
 });
 
 
