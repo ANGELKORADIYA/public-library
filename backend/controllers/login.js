@@ -13,11 +13,18 @@ signup takes :-
   companyname
 */
 module.exports.signup = async function (req, res) {
+<<<<<<< HEAD
   console.log(req.body)
   try {
     if (
       (req.body.password,
       req.body.confirmpassword && req.body.username && req.body.email && req.body.address && req.body.pincode && req.body.phone)
+=======
+  try {
+    if (
+      (req.body.password,
+      req.body.confirmpassword && (req.body.role=="member" || req.body.role=="librarian" ) && req.body.username && req.body.email && req.body.address && req.body.pincode && req.body.phone)
+>>>>>>> 7084703a624126200949995784e3393b0ee3f8a7
     ) {
       if (req.body.password == req.body.confirmpassword) {
         let check = await loginModel.findOne({
@@ -62,7 +69,10 @@ module.exports.login = async (req, res) => {
     let check = await loginModel.findOne({
       email: req.body.email.toLowerCase(),
     });
+<<<<<<< HEAD
     console.log(check)
+=======
+>>>>>>> 7084703a624126200949995784e3393b0ee3f8a7
     if (check && req.body.password != "" && req.body.email != "") {
       if (await bcrypt.compare(req.body.password, check.password)) {
         // if (req.body.page == check.page) {
@@ -98,7 +108,10 @@ module.exports.email = async (req, res) => {
         { _id: valid.email },
         { projection }
       );
+<<<<<<< HEAD
       console.log(valid,req.token)
+=======
+>>>>>>> 7084703a624126200949995784e3393b0ee3f8a7
       if (result) {
         res
           .status(200)

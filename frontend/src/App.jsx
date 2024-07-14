@@ -15,6 +15,11 @@ import Navbar from "./navbar/Navbar";
 import Lander from "./login/Lander";
 import Footer from "./gencomp/Footer";
 import HomePage from "./gencomp/HomePage";
+<<<<<<< HEAD
+=======
+import BookDetailsForm from "./book/BookDetailsForm";
+import UpdateBook from "./book/UpdateBook"
+>>>>>>> 7084703a624126200949995784e3393b0ee3f8a7
 const App = () => {
   const [cookie, setCookie] = useState(document.cookie);
   const [isAuthenticated, setIsAuthenticated] = useState(!!cookie);
@@ -110,10 +115,18 @@ const App = () => {
           }
         />
         <Route
+<<<<<<< HEAD
           path="/createreport"
           element={
             isAuthenticated ? (
               <>
+=======
+          path="/addbook"
+          element={
+            isAuthenticated ? (
+              <>
+              <BookDetailsForm /> 
+>>>>>>> 7084703a624126200949995784e3393b0ee3f8a7
               </>
             ) : (
               <Navigate to="/login" />
@@ -121,10 +134,18 @@ const App = () => {
           }
         />
         <Route
+<<<<<<< HEAD
           path="/yourreports"
           element={
             isAuthenticated ? (
               <>
+=======
+          path="/updatebook"
+          element={
+            isAuthenticated ? (
+              <>
+              <UpdateBook />
+>>>>>>> 7084703a624126200949995784e3393b0ee3f8a7
               </>
             ) : (
               <Navigate to="/login" />

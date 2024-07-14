@@ -108,7 +108,11 @@ const App = ({ isAuthenticated, role }) => {
         </Box>
        
         <Box display="flex" alignItems="center">
+<<<<<<< HEAD
           {isAuthenticated ? (
+=======
+          {isAuthenticated&& role == "member" ? (
+>>>>>>> 7084703a624126200949995784e3393b0ee3f8a7
             <>
               <StyledLink to="/dashboard">
                 <StyledButton>Home</StyledButton>
@@ -120,9 +124,26 @@ const App = ({ isAuthenticated, role }) => {
                 <StyledButton>Crime Map</StyledButton>
               </StyledLink>
             </>
+<<<<<<< HEAD
           ) : (
             ""
           )}
+=======
+          ) :""}
+          { isAuthenticated && role == "librarian" ? (
+            <>
+            <StyledLink to="/dashboard">
+                <StyledButton>Home</StyledButton>
+              </StyledLink>
+              <StyledLink to="/addbook">
+                <StyledButton>Add Book</StyledButton>
+              </StyledLink>
+              <StyledLink to="/updatebook">
+                <StyledButton>Update book</StyledButton>
+              </StyledLink></>
+          ):""
+          }
+>>>>>>> 7084703a624126200949995784e3393b0ee3f8a7
         </Box>
         <Box display="flex" alignItems="center">
           {isAuthenticated ? (

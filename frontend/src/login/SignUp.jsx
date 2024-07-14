@@ -63,7 +63,11 @@ const SignUpPopup = (props) => {
     phone: "",
   });
 
+<<<<<<< HEAD
   const roleOptions = ["member", "librarian", "admin"]; // Added "admin"
+=======
+  const roleOptions = ["member", "librarian"]; // Added "admin"
+>>>>>>> 7084703a624126200949995784e3393b0ee3f8a7
 
   const handleSignUp = async (evt) => {
     evt.preventDefault();
