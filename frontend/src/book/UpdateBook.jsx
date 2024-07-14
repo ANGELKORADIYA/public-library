@@ -11,11 +11,13 @@ import {
   DialogContent,
   DialogActions,
   Button,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { post } from "../Rest"; // Assuming you have APIs for GET, PUT, and DELETE
+import { post } from "../Rest";
 import { toast } from "react-toastify";
 
 const BookCard = styled(Card)({
@@ -41,6 +43,11 @@ const BooksList = () => {
     quantity: "",
     images: [],
   });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedAuthor, setSelectedAuthor] = useState("");
+  const [selectedGenre, setSelectedGenre] = useState("");
+  const [authors, setAuthors] = useState([]);
+  const [genres, setGenres] = useState([]);
 
   useEffect(() => {
     fetchBooks();
@@ -48,10 +55,22 @@ const BooksList = () => {
 
   const fetchBooks = async () => {
     try {
-      const response = await post("book/getbooks"); // Replace with your actual API endpoint for fetching all books
+      const response = await post("book/getbooks", {
+        searchTerm,
+        author: selectedAuthor,
+        genre: selectedGenre,
+      });
+
       if (response.okk) {
         setBooks(response.data);
-        console.log(books)
+        const uniqueAuthors = [
+          ...new Set(response.data.map((book) => book.author)),
+        ];
+        const uniqueGenres = [
+          ...new Set(response.data.map((book) => book.genre)),
+        ];
+        setAuthors(uniqueAuthors);
+        setGenres(uniqueGenres);
       } else {
         toast.error("Failed to fetch books");
       }
@@ -101,7 +120,7 @@ const BooksList = () => {
 
   const handleUpdateBook = async () => {
     try {
-      const response = await post(`book/updatebook`, formData); // Assuming 'put' is your API function for updating a book
+      const response = await post(`book/updatebook`, formData);
 
       if (response.okk) {
         toast.success("📚 Book Details Updated Successfully!");
@@ -119,7 +138,7 @@ const BooksList = () => {
   const handleDeleteBook = async (bookId) => {
     if (window.confirm("Are you sure you want to delete this book?")) {
       try {
-        const response = await post(`book/deletebook`, {isbn: bookId}); // Assuming 'remove' is your API function for deleting a book
+        const response = await post(`book/deletebook`, { isbn: bookId });
 
         if (response.okk) {
           toast.success("📚 Book Deleted Successfully!");
@@ -134,39 +153,110 @@ const BooksList = () => {
     }
   };
 
+  const filterBooks = (book) => {
+    const matchesSearch =
+      book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      book.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      book.genre.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesAuthor =
+      selectedAuthor === "" || book.author === selectedAuthor;
+    const matchesGenre = selectedGenre === "" || book.genre === selectedGenre;
+
+    return matchesSearch && matchesAuthor && matchesGenre;
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleAuthorChange = (e) => {
+    setSelectedAuthor(e.target.value);
+  };
+
+  const handleGenreChange = (e) => {
+    setSelectedGenre(e.target.value);
+  };
+
   return (
     <div>
       <Typography variant="h4" gutterBottom>
         Books List
       </Typography>
-      {books.map((book) => (
-        <BookCard key={book._id}>
-          <CardContent>
-            <Typography variant="h5">{book.title}</Typography>
-            <Typography variant="subtitle1" color="textSecondary">
-              {book.author}
-            </Typography>
-            <Typography variant="body2">{book.publisher}</Typography>
-            <Typography variant="body2">{book.year}</Typography>
-            <CardActions>
-              <IconButton
-                aria-label="edit"
-                color="primary"
-                onClick={() => handleEditClick(book)}
-              >
-                <EditIcon />
-              </IconButton>
-              <IconButton
-                aria-label="delete"
-                color="secondary"
-                onClick={() => handleDeleteBook(book.isbn)}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </CardActions>
-          </CardContent>
-        </BookCard>
-      ))}
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={4}>
+          <TextField
+            label="Search"
+            variant="outlined"
+            fullWidth
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Select
+            value={selectedAuthor}
+            onChange={handleAuthorChange}
+            variant="outlined"
+            fullWidth
+            displayEmpty
+          >
+            <MenuItem value="">All Authors</MenuItem>
+            {authors.map((author) => (
+              <MenuItem key={author} value={author}>
+                {author}
+              </MenuItem>
+            ))}
+          </Select>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Select
+            value={selectedGenre}
+            onChange={handleGenreChange}
+            variant="outlined"
+            fullWidth
+            displayEmpty
+          >
+            <MenuItem value="">All Genres</MenuItem>
+            {genres.map((genre) => (
+              <MenuItem key={genre} value={genre}>
+                {genre}
+              </MenuItem>
+            ))}
+          </Select>
+        </Grid>
+      </Grid>
+
+      {books
+        .filter(filterBooks)
+        .map((book) => (
+          <BookCard key={book._id}>
+            <CardContent>
+              <Typography variant="h5">{book.title}</Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                {book.author}
+              </Typography>
+              <Typography variant="body2">{book.publisher}</Typography>
+              <Typography variant="body2">{book.year}</Typography>
+              <CardActions>
+                <IconButton
+                  aria-label="edit"
+                  color="primary"
+                  onClick={() => handleEditClick(book)}
+                >
+                  <EditIcon />
+                </IconButton>
+                <IconButton
+                  aria-label="delete"
+                  color="secondary"
+                  onClick={() => handleDeleteBook(book.isbn)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </CardActions>
+            </CardContent>
+          </BookCard>
+        ))}
       <Dialog open={openEditDialog} onClose={handleEditDialogClose}>
         <DialogTitle>Edit Book Details</DialogTitle>
         <DialogContent>

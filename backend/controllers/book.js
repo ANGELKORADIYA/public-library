@@ -111,3 +111,13 @@ module.exports.checkout = async (req, res) => {
     res.status(500).json({ message: "Error during checkout" });
   }
 };
+module.exports.checkouttt = async (req, res) => {
+  try {
+    const checkouts = await checkoutModel.find(); // Adjust as per your schema
+    res.status(200).json({data:checkouts});
+
+  } catch (error) {
+    console.error("Error during checkout:", error);
+    res.status(500).json({ message: "Error during checkout" });
+  }
+};

@@ -18,6 +18,7 @@ import HomePage from "./gencomp/HomePage";
 import BookDetailsForm from "./book/BookDetailsForm";
 import UpdateBook from "./book/UpdateBook"
 import Checkout from "./book/Checkout";
+import ChekoutSystem from "./book/CheckoutSystem";
 const App = () => {
   const [cookie, setCookie] = useState(document.cookie);
   const [isAuthenticated, setIsAuthenticated] = useState(!!cookie);
@@ -146,10 +147,11 @@ const App = () => {
           }
         />
         <Route
-          path="/PoliceCrimeReports"
+          path="/checkoutdetails"
           element={
             isAuthenticated ? (
               <>
+              {role === "member" ? <ChekoutSystem /> : ""}
               </>
             ) : (
               <Navigate to="/login" />

@@ -22,7 +22,7 @@ const getDueDate = (req, res) => {
     let MailGenerator = new Mailgen({
         theme: "default",
         product : {
-            name: "Libguard",
+            name: "LibraEase",
             link : 'https://google.com'
         }
     })
@@ -44,7 +44,7 @@ const getDueDate = (req, res) => {
         body: {
             title: 'Due Date Reminder for Book Return',
             name: 'User',
-            intro: 'We are Libguard! The due date for returning your books is today. Please return the books by 12:00 PM to avoid any late fees.',
+            intro: 'We are LibraEase! The due date for returning your books is today. Please return the books by 12:00 PM to avoid any late fees.',
             table: {
                 data: bookData,
                 columns: {
@@ -62,7 +62,7 @@ const getDueDate = (req, res) => {
                 }
             },
             action: {
-                instructions: 'To pay your dues and log in to your Libguard account, please click the button below. A charge of 10 Rs per day will be applied if the books are not returned on time.',
+                instructions: 'To pay your dues and log in to your LibraEase account, please click the button below. A charge of 10 Rs per day will be applied if the books are not returned on time.',
                 button: {
                     color: '#22BC66',
                     text: 'Go to your account',
@@ -111,7 +111,7 @@ const getBorrowDetails = (req, res) => {
     let MailGenerator = new Mailgen({
         theme: "default",
         product : {
-            name: "Libguard",
+            name: "LibraEase",
             link : 'https://google.com'
         }
     })
