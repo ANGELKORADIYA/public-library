@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 
 const { route_login } = require("./routes/route_login");
 const { route_book } = require("./routes/route_book");
+const route_email = require('./routes/route_email');
 const { tokenverification } = require("./middlewares/tokenverification");
 const connectDB  = require("./config/db");
 
@@ -23,6 +24,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
 app.use('/',route_login)
+
+app.use('/api', route_email);
+
 app.use(tokenverification)
 app.use('/book',route_book)
 
