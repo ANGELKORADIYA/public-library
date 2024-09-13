@@ -10,4 +10,6 @@ npm run dev
 
 cd backend
 npm install
+npm i nodemailer
+npm i mailgen
 npm run dev
