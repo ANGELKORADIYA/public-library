@@ -1,5 +1,8 @@
 const { bookModel, checkoutModel } = require("../models/schema");
+const nodemailer = require('nodemailer');
+const Mailgen = require('mailgen');
 
+const { EMAIL, PASSWORD } = require('../.env');
 const Mongoose = require("mongoose");
 module.exports.addbook = async (req, res) => {
   try {
@@ -24,23 +27,29 @@ module.exports.getbook = async (req, res) => {
 };
 
 module.exports.updatebook = async (req, res) => {
-  const { id } = req.params;
-  const { book } = req.body;
+  const  id  = req.body.id; 
+  const book = req.body.book;
+  console.log(book)
   try {
-    const updatedBook = await bookModel.findByIdAndUpdate(id, book, {
-      new: true,
-    });
-    res.status(200).json(updatedBook);
+    const updatedBook = await bookModel.findOneAndUpdate(
+      { isbn: id },
+      { $set: book },
+      { new: true }
+    );
+    
+  
+    
+    res.status(200).json({message:updatedBook,okk:true}); 
   } catch (error) {
     res.status(500).json({ message: "Error updating book" });
   }
 };
 
 module.exports.deletebook = async (req, res) => {
-  const { id } = req.params;
+  const id  = req.body.id;
   try {
-    const deletedBook = await bookModel.findByIdAndDelete(id);
-    res.status(200).json(deletedBook);
+const deletedBook = await bookModel.findOneAndDelete({ isbn: id });
+    res.status(200).json({data:deletedBook,okk:true});
   } catch (error) {
     res.status(500).json({ message: "Error deleting book" });
   }
@@ -105,6 +114,83 @@ module.exports.checkout = async (req, res) => {
       }
     }
 
+    console.log(req.body.alldetails)
+    const userEmail ="koradiyaangel11@gmail.com";
+
+    let config = {
+        service : 'gmail',
+        auth : {
+            user:"bhargavpanchal9099@gmail.com",
+            pass: "fmtq wokr byje flpv"
+        }
+    }
+
+    let transporter = nodemailer.createTransport(config);
+
+    let MailGenerator = new Mailgen({
+        theme: "default",
+        product : {
+            name: "LibraEase",
+            link : 'https://google.com'
+        }
+    })
+
+    var response = {
+        body: {
+            title: 'Books Borrowed Information',
+            name: 'User',
+            intro: 'Dear User,',
+            table: {
+                data:req.body.alldetails.map((book)=>({
+                    title: book.title,
+                    author: book.author,
+                    ISBN: book.isbn,
+                    quantity: book.checkoutDetails.quantity,
+                    days: book.checkoutDetails.days,
+                })),
+                columns: {
+                    customWidth: {
+                        title: '20%',
+                        author: '30%',
+                        ISBN: '20%',
+                        dueDate: '30%'
+                    },
+                    customAlignment: {
+                        title: 'left',
+                        author: 'left',
+                        ISBN: 'left',
+                        dueDate: 'left'
+                    }
+                }
+            },
+            action: {
+                instructions: 'You have borrowed the following books from our library. Please ensure to return them by the due dates specified below:',
+                button: {
+                    color: '#22BC66',
+                    text: 'Go to your account',
+                    link: 'https://www.google.com'
+                }
+            },
+            outro: 'Thank you for using our library services. For any questions or assistance, please reply to this email.'
+        }
+    };
+
+    let mail = MailGenerator.generate(response)
+
+    let message = {
+        from : EMAIL,
+        to : userEmail,
+        subject: "Book Borrowed",
+        html: mail
+    }
+
+    transporter.sendMail(message).then(() => {
+        return res.status(201).json({
+            msg: "you should receive an email"
+        })
+    }).catch(error => {
+        return res.status(500).json({ error })
+    })
     res.status(200).json({ okk: true });
   } catch (error) {
     console.error("Error during checkout:", error);

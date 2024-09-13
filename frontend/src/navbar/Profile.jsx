@@ -1,7 +1,7 @@
 import React from "react";
 import { Popover, Typography, Box } from "@mui/material";
 
-const ProfileDetailsPopup = ({ open, anchorEl, onClose }) => {
+const ProfileDetailsPopup = ({ open, anchorEl, onClose ,role,email}) => {
   return (
     <Popover
       open={open}
@@ -20,9 +20,8 @@ const ProfileDetailsPopup = ({ open, anchorEl, onClose }) => {
         <Typography variant="h6">User Profile</Typography>
         <Typography variant="body2">
           {/* Replace with actual user profile details */}
-          Name: John Doe <br />
-          Email: john.doe@example.com <br />
-          Role: Admin
+          Email: {email}<br />
+          Role: {role}
         </Typography>
       </Box>
     </Popover>

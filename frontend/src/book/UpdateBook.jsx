@@ -13,6 +13,7 @@ import {
   Button,
   Select,
   MenuItem,
+  CardMedia,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -22,6 +23,10 @@ import { toast } from "react-toastify";
 
 const BookCard = styled(Card)({
   marginBottom: "16px",
+  height: "100%",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
 });
 
 const CardActions = styled("div")({
@@ -48,6 +53,7 @@ const BooksList = () => {
   const [selectedGenre, setSelectedGenre] = useState("");
   const [authors, setAuthors] = useState([]);
   const [genres, setGenres] = useState([]);
+  const [imageIndex, setImageIndex] = useState(0); // Track current image index for hover navigation
 
   useEffect(() => {
     fetchBooks();
@@ -120,7 +126,10 @@ const BooksList = () => {
 
   const handleUpdateBook = async () => {
     try {
-      const response = await post(`book/updatebook`, formData);
+      const response = await post(`book/updatebook`, {
+        book: formData,
+        id: selectedBook.isbn,
+      });
 
       if (response.okk) {
         toast.success("📚 Book Details Updated Successfully!");
@@ -138,7 +147,7 @@ const BooksList = () => {
   const handleDeleteBook = async (bookId) => {
     if (window.confirm("Are you sure you want to delete this book?")) {
       try {
-        const response = await post(`book/deletebook`, { isbn: bookId });
+        const response = await post(`book/deletebook`, { id: bookId });
 
         if (response.okk) {
           toast.success("📚 Book Deleted Successfully!");
@@ -176,6 +185,20 @@ const BooksList = () => {
 
   const handleGenreChange = (e) => {
     setSelectedGenre(e.target.value);
+  };
+
+  const handleMouseEnter = () => {
+    // Increment image index when hovering over the card media
+    if (formData.images.length > 1) {
+      setImageIndex((prevIndex) =>
+        prevIndex === formData.images.length - 1 ? 0 : prevIndex + 1
+      );
+    }
+  };
+
+  const handleMouseLeave = () => {
+    // Reset image index when mouse leaves the card media
+    setImageIndex(0);
   };
 
   return (
@@ -227,36 +250,49 @@ const BooksList = () => {
         </Grid>
       </Grid>
 
-      {books
-        .filter(filterBooks)
-        .map((book) => (
-          <BookCard key={book._id}>
-            <CardContent>
-              <Typography variant="h5">{book.title}</Typography>
-              <Typography variant="subtitle1" color="textSecondary">
-                {book.author}
-              </Typography>
-              <Typography variant="body2">{book.publisher}</Typography>
-              <Typography variant="body2">{book.year}</Typography>
-              <CardActions>
-                <IconButton
-                  aria-label="edit"
-                  color="primary"
-                  onClick={() => handleEditClick(book)}
-                >
-                  <EditIcon />
-                </IconButton>
-                <IconButton
-                  aria-label="delete"
-                  color="secondary"
-                  onClick={() => handleDeleteBook(book.isbn)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </CardActions>
-            </CardContent>
-          </BookCard>
-        ))}
+      <Grid container spacing={2}>
+        {books
+          .filter(filterBooks)
+          .map((book) => (
+            <Grid key={book._id} item xs={12} sm={6} md={4} lg={3}>
+              <BookCard>
+                <CardMedia
+                  component="img"
+                  image={book.images.length > 0 ? book.images[imageIndex] : ""}
+                  alt={book.title}
+                  height={200}
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
+                />
+                <CardContent>
+                  <Typography variant="h5">{book.title}</Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    {book.author}
+                  </Typography>
+                  <Typography variant="body2">{book.publisher}</Typography>
+                  <Typography variant="body2">{book.year}</Typography>
+                </CardContent>
+                <CardActions>
+                  <IconButton
+                    aria-label="edit"
+                    color="primary"
+                    onClick={() => handleEditClick(book)}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton
+                    aria-label="delete"
+                    color="secondary"
+                    onClick={() => handleDeleteBook(book.isbn)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </CardActions>
+              </BookCard>
+            </Grid>
+          ))}
+      </Grid>
+
       <Dialog open={openEditDialog} onClose={handleEditDialogClose}>
         <DialogTitle>Edit Book Details</DialogTitle>
         <DialogContent>

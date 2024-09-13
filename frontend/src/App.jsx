@@ -23,6 +23,7 @@ const App = () => {
   const [cookie, setCookie] = useState(document.cookie);
   const [isAuthenticated, setIsAuthenticated] = useState(!!cookie);
   const [role, setRole] = useState(null);
+  const [email, setEmail] = useState(null); 
   useEffect(() => {
     (async () => {
       const res = await post("email");
@@ -31,6 +32,7 @@ const App = () => {
       } else {
         setIsAuthenticated(!!cookie);
         setRole(res.role);
+        setEmail(res.email);
       }
     })();
   }, [cookie]);
@@ -41,6 +43,7 @@ const App = () => {
       <Navbar
         isAuthenticated={isAuthenticated}
         role={role}
+        email={email}
       />
       <Routes>
         <Route

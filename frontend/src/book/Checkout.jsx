@@ -98,7 +98,7 @@ const CheckoutSystem = () => {
       quantity: book.checkoutDetails.quantity,
     }));
 
-    const res = await post("book/checkout", { books: checkoutData });
+    const res = await post("book/checkout", { books: checkoutData,alldetails:selectedBooks });
 
     if (res.okk) {
       toast.success("Books Checked Out Successfully!");
